@@ -1,0 +1,114 @@
+CREATE TABLE superstore (
+    item_id INTEGER PRIMARY KEY,
+    item_name TEXT,
+    category TEXT,
+    price DECIMAL(10, 2),
+    stock_quantity INTEGER,
+    average_rating DECIMAL(5, 2)
+);
+
+INSERT INTO superstore (item_id, item_name, category, price, stock_quantity, average_rating)
+VALUES
+    (1, 'Stainless Steel Cookware Set', 'Kitchen Supplies', 89.99, 50, 4.6),
+    (2, 'Memory Foam Mattress', 'Furnishings', 499.99, 30, 4.8),
+    (3, 'Smart LED TV', 'Electronics', 549.00, 20, 4.5),
+    (4, 'Robot Vacuum Cleaner', 'Appliances', 199.50, 40, 4.3),
+    (5, 'Wireless Bluetooth Speaker', 'Electronics', 39.99, 60, 4.2),
+    (6, 'Non-Stick Baking Set', 'Kitchen Supplies', 29.95, 80, 4.4),
+    (7, 'Cotton Bedding Set', 'Furnishings', 89.00, 25, 4.7),
+    (8, 'Smart Home Security Camera', 'Electronics', 79.95, 15, 4.1),
+    (9, 'Air Purifier', 'Appliances', 129.50, 35, 4.6),
+    (10, 'Premium Coffee Maker', 'Kitchen Supplies', 79.99, 50, 4.9),
+    (11, 'Ergonomic Office Chair', 'Furnishings', 189.00, 20, 4.5),
+    (12, 'Wireless Earbuds', 'Electronics', 49.99, 75, 4.3),
+    (13, 'Slow Cooker', 'Appliances', 49.95, 30, 4.7),
+    (14, 'Cutlery Set', 'Kitchen Supplies', 34.50, 40, 4.4),
+    (15, 'Cozy Throw Blanket', 'Furnishings', 24.99, 100, 4.2);
+
+Writte Codes
+
+-- Price of each item_name
+select price, item_name
+from superstore;
+
+
+
+-- Total sum of all item prices
+SELECT SUM(price) AS total_price FROM superstore;
+
+-- Average price of items
+SELECT AVG(price) AS average_price FROM superstore;
+
+-- Minimum item price
+SELECT MIN(price) AS lowest_price FROM superstore;
+
+-- Maximum item price
+SELECT MAX(price) AS highest_price FROM superstore;
+
+-- Count of items with a price listed
+SELECT COUNT(price) AS priced_items_count FROM superstore;
+
+-- Price statistics grouped by category
+SELECT 
+    category,
+    COUNT(*) AS item_count,
+    AVG(price) AS average_price,
+    MIN(price) AS min_price,
+    MAX(price) AS max_price,
+    SUM(price) AS total_price
+FROM superstore
+GROUP BY category;
+
+-- Inventory & Stock Statistics
+-- Total stock across all items
+SELECT SUM(stock_quantity) AS total_stock FROM superstore;
+
+-- Average stock per item
+SELECT AVG(stock_quantity) AS average_stock FROM superstore;
+
+-- Items with zero stock
+SELECT COUNT(*) AS out_of_stock_items FROM superstore WHERE stock_quantity = 0;
+
+-- Maximum and minimum stock levels
+SELECT MAX(stock_quantity) AS max_stock, MIN(stock_quantity) AS min_stock FROM superstore;
+
+-- Rating statistics
+-- Average rating across all items
+SELECT AVG(average_rating) AS overall_average_rating FROM superstore;
+
+-- Count of items with high ratings (e.g., 4.5 and above)
+SELECT COUNT(*) AS highly_rated_items FROM superstore WHERE average_rating >= 4.5;
+
+-- Items with no rating (assuming NULLs)
+SELECT COUNT(*) AS unrated_items FROM superstore WHERE average_rating IS NULL;
+
+Combines Metrics
+-- Total inventory value (price × stock)
+SELECT SUM(price * stock_quantity) AS total_inventory_value FROM superstore;
+
+-- Average inventory value per item
+SELECT AVG(price * stock_quantity) AS average_inventory_value FROM superstore;
+
+-- Category-wise inventory value
+SELECT 
+    category,
+    SUM(price * stock_quantity) AS category_inventory_value
+FROM superstore
+GROUP BY category;
+
+-- Distribution Insights
+-- Count of items per category
+SELECT category, COUNT(*) AS item_count FROM superstore GROUP BY category;
+
+-- Average price per rating bracket
+SELECT 
+    CASE 
+        WHEN average_rating >= 4.5 THEN 'Excellent'
+        WHEN average_rating >= 3.5 THEN 'Good'
+        WHEN average_rating >= 2.5 THEN 'Average'
+        ELSE 'Poor'
+    END AS rating_group,
+    AVG(price) AS avg_price
+FROM superstore
+GROUP BY rating_group;
+
